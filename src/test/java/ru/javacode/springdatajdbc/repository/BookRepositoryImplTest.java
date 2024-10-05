@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import ru.javacode.springdatajdbc.model.Book;
@@ -14,16 +15,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(BookRowMapper.class)
 public class BookRepositoryImplTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private BookRowMapper bookRowMapper;
+
     private BookRepositoryImpl bookRepository;
 
     @BeforeEach
     void setUp() {
-        bookRepository = new BookRepositoryImpl(jdbcTemplate);
+        bookRepository = new BookRepositoryImpl(jdbcTemplate, bookRowMapper);
     }
 
     @Test

@@ -15,6 +15,7 @@ import java.sql.Statement;
 public class BookRepositoryImpl implements BookRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final BookRowMapper bookRowMapper;
 
     @Override
     public Book save(Book book) {
@@ -42,16 +43,8 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Book findById(Long id) {
-        return jdbcTemplate.queryForObject(
-                "SELECT * FROM book WHERE id = ?",
-                (rs, rowNum) -> Book.builder()
-                        .id(rs.getLong("id"))
-                        .title(rs.getString("title"))
-                        .author(rs.getString("author"))
-                        .publicationYear(rs.getInt("publication_year"))
-                        .build(),
-                id
-        );
+        String sql = "SELECT * FROM book WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, bookRowMapper, id);
     }
 
     @Override
