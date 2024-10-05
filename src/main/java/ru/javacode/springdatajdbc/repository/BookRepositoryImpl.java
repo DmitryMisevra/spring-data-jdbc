@@ -60,7 +60,6 @@ public class BookRepositoryImpl implements BookRepository {
 
         jdbcTemplate.update(sql, book.getTitle(), book.getAuthor(), book.getPublicationYear(), id);
 
-        // Возвращаем обновлённую книгу
         return Book.builder()
                 .id(id)
                 .title(book.getTitle())
